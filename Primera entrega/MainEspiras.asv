@@ -1,0 +1,31 @@
+clear; close all; clc;
+
+% Características de las espiras
+nI = 5; % Número de espiras
+N = 50; % Puntos por espira
+R = 1.5; % Radio de cada espira (m)
+sz = 1; % Separación entre espiras (m)
+I = 300; % Corriente (A)
+mo = 4*pi*1e-7; % Permeabilidad magnética del vacío
+km = mo * I / (4*pi); % Constante de Biot-Savart
+rw = 0.2; % Grosor efectivo del alambre
+
+[x, y, z, dlx, dly, dlz] = dibujar_espiras_y_dl(nI,N,R,sz,I);
+[Bx, By, Bz, Mx, My, Mz] = campoB(rw, km, x, y, z, dlx, dly, dlz);
+
+zo = 4.9;
+dt = 0.01;
+F = 
+idx_x = ceil(Mx / 2);
+idx_y = ceil(My / 2);
+Bz = squeeze(dBz(idx_x, idx_y, :));
+
+delta = 0.005;
+for cc = 1:lenght(zm)
+    Bz_forward = interpl(z, Bz, zm(cc) + delta, "linear", "extrap");
+    Bz_backward = interpl(z, Bz, zm(cc) - delta, "linear", "extrap");
+    dBz_dz(cc) = (Bz_forward - Bz_backward) / (2 * delta);
+end
+
+Fm(cc)
+    
