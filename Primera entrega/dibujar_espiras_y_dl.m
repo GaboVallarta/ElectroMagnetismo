@@ -1,3 +1,4 @@
+
 function [x_total, y_total, z_total, dlx_total, dly_total, dlz_total] = dibujar_espiras_y_dl(nI, N, R, sz, I)
 
     % PASO 1: Validar los parámetros de entrada

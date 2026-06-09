@@ -1,11 +1,12 @@
-function [Bx, By, Bz, x, y, z] = campoB(rw, km, x, y, z, dlx, dly, dlz)
-    rango_x = 3; % Rango en X (m)
-    rango_y = 3; % Rango en Y (m)
+
+function [Bx, By, Bz, Mx, My, Mz] = campoB(km, x, y, z, dlx, dly, dlz)
+    rango_x = 6; % Rango en X (m)
+    rango_y = 6; % Rango en Y (m)
     rango_z = 5; % Rango en Z (m)
 
-    Mx = -rango_x:rw:rango_x;
-    My = -rango_y:rw:rango_y;
-    Mz = -rango_z:rw:rango_z;
+    Mx = -rango_x:0.1:rango_x;
+    My = -rango_y:0.1:rango_y;
+    Mz = -rango_z:0.05:rango_z;
     
     Lx = length(Mx);
     Ly = length(My);
@@ -14,6 +15,7 @@ function [Bx, By, Bz, x, y, z] = campoB(rw, km, x, y, z, dlx, dly, dlz)
     Bx = zeros(Lx, Ly, Lz);
     By = zeros(Lx, Ly, Lz);
     Bz = zeros(Lx, Ly, Lz);
+
     
     fprintf('  Grid: %d x %d x %d = %d puntos\n', Lx, Ly, Lz, Lx*Ly*Lz);
 
@@ -34,6 +36,7 @@ function [Bx, By, Bz, x, y, z] = campoB(rw, km, x, y, z, dlx, dly, dlz)
                     
                     % Evitar división por cero
                     if r3 > 1e-10
+                        % Biot-Savart
                         Bx(i,j,k) = Bx(i,j,k) + km * (dly(l) * rz - dlz(l) * ry) / r3;
                         By(i,j,k) = By(i,j,k) + km * (dlz(l) * rx - dlx(l) * rz) / r3;
                         Bz(i,j,k) = Bz(i,j,k) + km * (dlx(l) * ry - dly(l) * rx) / r3;
@@ -42,4 +45,3 @@ function [Bx, By, Bz, x, y, z] = campoB(rw, km, x, y, z, dlx, dly, dlz)
             end
         end
     end
-    visualizar_campo(Mx, My, Mz, Bx, By, Bz);
