@@ -1,4 +1,4 @@
-function [t, pos, vel] = simular_caida(m_masa, momento_z, gamma, z0, v0, t_final, dt, z_eje, dBz_dz)
+function [t, pos, vel] = simular_caida(m, mz, gamma, z0, v0, t_final, dt, z_eval, dBz_dz)
     t = 0:dt:t_final;
     Nt = length(t);
     pos = zeros(1, Nt);
@@ -6,10 +6,10 @@ function [t, pos, vel] = simular_caida(m_masa, momento_z, gamma, z0, v0, t_final
     pos(1) = z0;
     vel(1) = v0;
     g = 9.81;
+    mag = abs(mz);
 
-   aceleracion = @(z, v) (-momento_z * interp1(z_eje, dBz_dz, z, 'linear', 'extrap') - gamma * v) / m_masa - g;
-    
-    % rk4
+    aceleracion = @(z, v) (-mag * interp1(z_eval, dBz_dz, z, 'linear', 'extrap') - gamma * v - m * g ) / m;
+
     for i = 1:Nt-1
         z_actual = pos(i);
         v_actual = vel(i);
@@ -28,8 +28,7 @@ function [t, pos, vel] = simular_caida(m_masa, momento_z, gamma, z0, v0, t_final
 
         z_new = z_actual + (dt/6) * (k1_z + 2*k2_z + 2*k3_z + k4_z);
         v_new = v_actual + (dt/6) * (k1_v + 2*k2_v + 2*k3_v + k4_v);
-    
-        % si lllega a 0 se detiene
+
         if z_new <= 0
             fraccion = (0 - z_actual) / (z_new - z_actual);
             t_exact = t(i) + fraccion * dt;
@@ -43,9 +42,6 @@ function [t, pos, vel] = simular_caida(m_masa, momento_z, gamma, z0, v0, t_final
         else
             pos(i+1) = z_new;
             vel(i+1) = v_new;
-        end 
+        end
     end
-        t   = t(1:i+1);
-        pos = pos(1:i+1);
-        vel = vel(1:i+1);
 end

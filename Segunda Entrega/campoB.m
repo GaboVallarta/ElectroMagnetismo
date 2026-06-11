@@ -14,6 +14,7 @@ function [Bx, By, Bz, Mx, My, Mz] = campoB(km, x, y, z, dlx, dly, dlz)
     Bx = zeros(Lx, Ly, Lz);
     By = zeros(Lx, Ly, Lz);
     Bz = zeros(Lx, Ly, Lz);
+
     
     fprintf('  Grid: %d x %d x %d = %d puntos\n', Lx, Ly, Lz, Lx*Ly*Lz);
 
@@ -43,3 +44,4 @@ function [Bx, By, Bz, Mx, My, Mz] = campoB(km, x, y, z, dlx, dly, dlz)
             end
         end
     end
+end

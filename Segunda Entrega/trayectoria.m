@@ -1,4 +1,3 @@
-
 function [t, pos, vel] = trayectoria(m_masa, gamma, z0, v0, t_final, dt, z_mid, dPhi_dz, R_circuito)
 
     t   = 0:dt:t_final;
@@ -7,6 +6,7 @@ function [t, pos, vel] = trayectoria(m_masa, gamma, z0, v0, t_final, dt, z_mid, 
     vel = zeros(1, Nt);
     pos(1) = z0;
     vel(1) = v0;
+    z_piso = -2.0;
 
     for i = 1:Nt-1
         z_i = pos(i);
@@ -27,14 +27,17 @@ function [t, pos, vel] = trayectoria(m_masa, gamma, z0, v0, t_final, dt, z_mid, 
         z_nuevo = z_i + (dt/6)*(k1z + 2*k2z + 2*k3z + k4z);
         v_nuevo = v_i + (dt/6)*(k1v + 2*k2v + 2*k3v + k4v);
 
-        if z_nuevo <= 0
-            frac  = (0 - z_i)/(z_nuevo - z_i);
-            t     = [t(1:i), t(i) + frac*dt];
-            pos   = [pos(1:i), 0];
-            vel   = [vel(1:i), v_i + frac*(v_nuevo - v_i)];
+        if z_nuevo <= z_piso
+            frac = (z_piso - z_i)/(z_nuevo - z_i);
+            t = [t(1:i), t(i) + frac*dt];
+            pos = [pos(1:i), -2.5];
+            vel = [vel(1:i), v_i + frac*(v_nuevo - v_i)];
             break
         end
         pos(i+1) = z_nuevo;
         vel(i+1) = v_nuevo;
     end
+    t   = t(1:i+1);
+    pos = pos(1:i+1);
+    vel = vel(1:i+1);
 end
